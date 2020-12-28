@@ -4,26 +4,38 @@ require('./vendor/autoload.php');
 $title = 'Register';
 include('./src/Templates/header.php');
 
-use App\Classes\Db;
-use App\Classes\Post;
 use App\Classes\User;
 use App\Classes\Validation;
 
+$user = new User();
+
+if(isset($_POST['register'])){
+    $email = Validation::validate($_POST['email']);
+    $password = Validation::validate($_POST['password']);
+
+    $result = $user->register($email, $password);
+    if($result){
+        header("Location: login.php");
+    }
+}
 ?>
 
 <link rel="stylesheet" href="<?php ROOT ?>/assets/css/signin.css">
 <body class="text-center">
-<form class="form-signin">
+<form method="post" class="form-signin">
     <h1 class="h3 mb-3 font-weight-normal">Register</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <?php if(isset($_SESSION['registerErrors'])){
+            echo "<div class='alert alert-danger'>". $_SESSION['registerErrors'] ."</div>";
+            unset($_SESSION['registerErrors']);
+        }
+    ?>
+    <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
     <div class="checkbox mb-3">
         <label>
             <input type="checkbox" value="remember-me"> Remember me
         </label>
     </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <input name="register" class="btn btn-lg btn-primary btn-block" type="submit" value="Register">
     <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
 </form>

@@ -3,9 +3,13 @@
 
 namespace App\Classes;
 
-class Validation extends Db
+class Validation
 {
-    public function __construct() {
-        echo 'Validation HERE';
+    public static function validate($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }
+
 }
