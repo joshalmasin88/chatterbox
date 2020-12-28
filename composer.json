@@ -1,0 +1,9 @@
+{
+    "name": "joshua/chatterbox",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\" : "src/"
+        }
+    }
+}
