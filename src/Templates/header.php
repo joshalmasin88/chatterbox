@@ -1,5 +1,7 @@
 <?php
-require('./config/constants.php')
+require('./config/constants.php');
+session_start();
+
 ?>
 
 <!doctype html>

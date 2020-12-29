@@ -41,6 +41,7 @@ class User extends Db
         }
         if(password_verify($password, $row['password'])){
             $_SESSION['userActive'] = true;
+            $_SESSION['email'] = $email;
             $_SESSION['userId'] = $row['id'];
             header("Location: home.php");
         } else {
