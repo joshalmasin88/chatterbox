@@ -3,9 +3,11 @@ require('./vendor/autoload.php');
 $title = 'Home';
 include('./src/Templates/header.php');
 
+use App\Classes\User;
 use App\Classes\Post;
 use App\Classes\Validation;
 
+$user = new User();
 $userPost = new Post();
 
 if(isset($_POST['messagepost'])) {
@@ -25,6 +27,11 @@ if(isset($_POST['messagepost'])) {
     <div class="row mt-5">
         <div id="sideBar" class="col-md-4">
             <h3><?php echo $_SESSION['email'] ?></h3>
+            <?php
+                $currentUser = $user->getUser($_SESSION['email']);
+                echo "<img class='img-thumbnail' src='".  $currentUser['profileImg'] ."'/>";
+
+            ?>
         </div>
         <div class="col-md-8">
             <div class="container">
@@ -48,13 +55,20 @@ if(isset($_POST['messagepost'])) {
                         <div class="card mt-5">
                             <div class="card-header">
                                 <span class="text-right">
-                                    <img style="height:50px; width:50px;" src="https://www.bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                    <img style="height:50px; width:50px;" src="<?= $post['profileImg']; ?>" alt="">
                                 </span>
                                 <span><?= $post['email']; ?></span>
                             </div>
                             <div class="card-body">
                                 <p><?= $post['post']; ?></p>
                             </div>
+                            <?php
+                            if($_SESSION['email'] === $post['email']) :
+                            ?>
+                            <div class="card-footer text-right">
+                                <a href="delete.php?id=<?= $post['id']; ?>" class="btn btn-danger">Delete Post</a>
+                            </div>
+                            <?php endif; ?>
                         </div>
                         <?php endforeach; ?>
                     </div>

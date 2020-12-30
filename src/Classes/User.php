@@ -13,17 +13,18 @@ class User extends Db
         $stmt->execute();
         return $stmt->rowCount();
     }
-    public function register($email, $password) {
+    public function register($email, $password, $profileImg) {
         $checkUser = $this->userExist($email);
         if($checkUser > 0){
             $_SESSION['registerErrors'] = "User already exists";
             return false;
         }
         $hashpass = password_hash($password, PASSWORD_BCRYPT);
-        $sql = "INSERT INTO users (email, password) VALUES (?,?)";
+        $sql = "INSERT INTO users (email, password, profileImg) VALUES (?,?,?)";
         $stmt = $this->connect()->prepare($sql);
         $stmt->bindValue(1, $email);
         $stmt->bindValue(2, $hashpass);
+        $stmt->bindValue(3, $profileImg);
         if($stmt->execute()) return true;
         return false;
     }
@@ -48,5 +49,13 @@ class User extends Db
             $_SESSION['loginErrors']  = "Incorrect Credentials";
             return false;
         }
+    }
+
+    public function getUser($email) {
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindValue(1,$email);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 }

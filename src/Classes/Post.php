@@ -16,8 +16,17 @@ class Post extends Db
     }
 
     public function viewAll(){
-        $sql = "SELECT * FROM posts ORDER BY (id) DESC LIMIT 5";
+        $sql = "SELECT * FROM posts INNER JOIN users ON posts.email=users.email ORDER BY posts.id DESC ";
         $stmt = $this->connect()->query($sql);
         return $stmt->fetchAll();
+    }
+
+    public function deletePost($id,$email) {
+        $sql = "DELETE FROM posts WHERE id = ? AND email = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindValue(1,$id);
+        $stmt->bindValue(2, $email);
+        $stmt->execute();
+        return true;
     }
 }
