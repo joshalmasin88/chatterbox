@@ -10,30 +10,36 @@ use App\Classes\Validation;
 $user = new User();
 
 if(isset($_POST['register'])){
-    $target_dir = $target_dir = 'assets/profile/imgs/';
-    $target_file = $target_dir . basename($_FILES['profileImg']['name']);
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    if(!is_uploaded_file($_FILES['profileImg']['tmp_name'])){
+        $_SESSION['registerErrors'] = 'Please upload a image';
+    } else {
+        $target_dir = $target_dir = 'assets/profile/imgs/';
+        $target_file = $target_dir . basename($_FILES['profileImg']['name']);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    $email = Validation::validate($_POST['email']);
-    $password = Validation::validate($_POST['password']);
+        $email = Validation::validate($_POST['email']);
+        $password = Validation::validate($_POST['password']);
 
-    // Check if image file is real
-    $check = getimagesize($_FILES['profileImg']['tmp_name']);
-    if($check !== false) {
-        // Check image size
-        if($_FILES['profileImg']['size'] < 500000) {
-            if (move_uploaded_file($_FILES["profileImg"]["tmp_name"], $target_file)) {
-                $result = $user->register($email, $password,$target_file);
-                if($result){
-                    header("Location: login.php");
+
+        // Check if image file is real
+        $check = getimagesize($_FILES['profileImg']['tmp_name']);
+        if($check !== false) {
+            // Check image size
+            if($_FILES['profileImg']['size'] < 500000) {
+                if (move_uploaded_file($_FILES["profileImg"]["tmp_name"], $target_file)) {
+                    $result = $user->register($email, $password,$target_file);
+                    if($result){
+                        header("Location: login.php");
+                    }
                 }
             }
+        } else {
+            $_SESSION['registerErrors'] = "Sorry this is not a image";
+
         }
-    } else {
-        $_SESSION['registerErrors'] = "Sorry this is not a image";
+
 
     }
-
 
 }
 ?>
