@@ -58,4 +58,11 @@ class User extends Db
         $stmt->execute();
         return $stmt->fetch();
     }
+
+    public function deleteUser($email) {
+        $sql = "DELETE users , posts FROM users INNER JOIN posts ON posts.email = users.email WHERE users.email = ? ";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindValue(1,$email);
+        $stmt->execute();
+    }
 }

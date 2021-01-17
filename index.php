@@ -13,7 +13,7 @@ if(isset($_POST['register'])){
     if(!is_uploaded_file($_FILES['profileImg']['tmp_name'])){
         $_SESSION['registerErrors'] = 'Please upload a image';
     } else {
-        $target_dir = $target_dir = 'assets/profile/imgs/';
+        $target_dir = $target_dir = './assets/profile/imgs/';
         $target_file = $target_dir . basename($_FILES['profileImg']['name']);
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 

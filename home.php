@@ -2,6 +2,7 @@
 require('./vendor/autoload.php');
 $title = 'Home';
 include('./src/Templates/header.php');
+require('./src/Auth.php');
 
 use App\Classes\User;
 use App\Classes\Post;
@@ -22,11 +23,20 @@ if(isset($_POST['messagepost'])) {
         border-right: 1px solid #c8cbcf;
     }
 
+
+    @media only screen and (max-width: 600px) {
+        #sideBar {
+            height: 30vh;
+        }
+    }
+
 </style>
 <div class="container-fluid">
     <div class="row mt-5">
         <div id="sideBar" class="col-md-4">
             <h3><?php echo $_SESSION['email'] ?></h3>
+            <a href="logout.php">Logout</a>
+            <a href="deleteprofile.php">Delete Profile</a>
             <?php
                 $currentUser = $user->getUser($_SESSION['email']);
                 echo "<img class='img-thumbnail' src='".  $currentUser['profileImg'] ."'/>";
@@ -50,6 +60,9 @@ if(isset($_POST['messagepost'])) {
 
                         <?php
                             $allPosts = $userPost->viewAll();
+//                            echo '<pre>';
+//                            var_dump($allPosts);
+//                            echo '</pre>';
                             foreach($allPosts as $post):
                         ?>
                         <div class="card mt-5">
@@ -66,7 +79,7 @@ if(isset($_POST['messagepost'])) {
                             if($_SESSION['email'] === $post['email']) :
                             ?>
                             <div class="card-footer text-right">
-                                <a href="delete.php?id=<?= $post['id']; ?>" class="btn btn-danger">Delete Post</a>
+                                <a href="delete.php?id=<?= $post['post_id']; ?>" class="btn btn-danger">Delete Post</a>
                             </div>
                             <?php endif; ?>
                         </div>
