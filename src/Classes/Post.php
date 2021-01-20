@@ -16,7 +16,7 @@ class Post extends Db
     }
 
     public function viewAll(){
-        $sql = "SELECT * FROM posts INNER JOIN users ON posts.email=users.email ORDER BY posts.post_id DESC ";
+        $sql = "SELECT * FROM posts INNER JOIN users ON posts.email=users.email ORDER BY posts.post_id DESC";
         $stmt = $this->connect()->query($sql);
         return $stmt->fetchAll();
     }
